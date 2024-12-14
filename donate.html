@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate - HopeLine</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="request.html">Request Help</a></li>
+            <li><a href="donate.html">Donate</a></li>
+        </ul>
+    </nav>
+
+    <main id="mainContent">
+        <h2>Donation Requests</h2>
+        <div id="requestsContainer"></div>
+    </main>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.9.3/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.3/firebase-app.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnFpHmsIQPczb3dO8fMmoE7Doz8IsopvE",
+            authDomain: "hope-line-4c207.firebaseapp.com",
+            projectId: "hope-line-4c207",
+            storageBucket: "hope-line-4c207.appspot.com",
+            messagingSenderId: "459565190820",
+            appId: "1:459565190820:web:10b561e8da4a5761d0a031",
+            measurementId: "G-B9MNC3X4B5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function fetchRequests() {
+            const querySnapshot = await getDocs(collection(db, "requests"));
+            const requestsContainer = document.getElementById("requestsContainer");
+
+            querySnapshot.forEach((doc) => {
+                const requestData = doc.data();
+                const requestDiv = document.createElement("div");
+                requestDiv.classList.add("request");
+
+                const nameElement = document.createElement("h3");
+                nameElement.textContent = `Name: ${requestData.name}`;
+                const itemElement = document.createElement("p");
+                itemElement.textContent = `Item Needed: ${requestData.item}`;
+                const locationElement = document.createElement("p");
+                locationElement.textContent = `Location: ${requestData.location}`;
+
+                requestDiv.appendChild(nameElement);
+                requestDiv.appendChild(itemElement);
+                requestDiv.appendChild(locationElement);
+
+                requestsContainer.appendChild(requestDiv);
+            });
+        }
+
+        fetchRequests();
+    </script>
+</body>
+</html>
