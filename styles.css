@@ -86,7 +86,7 @@ body {
 
 /* Main Content */
 main {
-    padding-top: 80px; /* Space below navbar */
+    padding-top: 120px; /* Space below navbar */
     width: 100%;
     min-height: 100vh;
     display: flex;
