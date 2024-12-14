@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate - HopeLine</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="request.html">Request Help</a></li>
+            <li><a href="donate.html">Donate</a></li>
+        </ul>
+    </nav>
+
+    <main id="mainContent">
+        <h2>Donation Requests</h2>
+        <div id="requestsContainer"></div>
+
+   
+        <div class="form-container">
+            <h3>Donate an Item</h3>
+            <form id="donationForm">
+                <div class="name-email-phone">
+                    <div class="input-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="email">Email (Optional)</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email">
+                    </div>
+                    <div class="input-group">
+                        <label for="phone">Phone (Optional)</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="item">Item Needed</label>
+                    <input type="text" id="item" name="item" placeholder="What item do you need?" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" placeholder="Where do you need the item?" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" placeholder="Describe your request" required></textarea>
+                </div>
+                <p>Please do not spam the Sumbit Request button it takes 30 seconds for the request to process until you get a message and it will then show up in the donate</p>
+                <button type="submit">Submit Request</button>
+            </form>
+        </div>
+    </main>
+
+    <script type="module">
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.9.3/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.3/firebase-app.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnFpHmsIQPczb3dO8fMmoE7Doz8IsopvE",
+            authDomain: "hope-line-4c207.firebaseapp.com",
+            projectId: "hope-line-4c207",
+            storageBucket: "hope-line-4c207.appspot.com",
+            messagingSenderId: "459565190820",
+            appId: "1:459565190820:web:10b561e8da4a5761d0a031",
+            measurementId: "G-B9MNC3X4B5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const donationForm = document.getElementById("donationForm");
+
+        donationForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            const item = document.getElementById("item").value;
+            const location = document.getElementById("location").value;
+            const description = document.getElementById("description").value;
+
+            try {
+                await addDoc(collection(db, "requests"), {
+                    name,
+                    email,
+                    phone,
+                    item,
+                    location,
+                    description,
+                });
+
+                alert("Donation request submitted successfully!,Check the donate page to view your request");
+                donationForm.reset();
+            } catch (error) {
+                console.error("Error submitting donation request: ", error);
+            }
+        });
+    </script>
+</body>
+</html>
